@@ -7,6 +7,7 @@ require 'extract_i18n'
 require 'extract_i18n/file_processor'
 require 'extract_i18n/version'
 require 'open-uri'
+require 'byebug'
 
 module ExtractI18n
   # Cli Class
@@ -22,8 +23,8 @@ module ExtractI18n
           exit 1
         end
 
-        opts.on('-lLOCALE', '--locale=LOCALE', 'default locale for extraction (Default = en)') do |f|
-          @options[:locale] = f || 'en'
+        opts.on('-lLOCALE', '--locale=LOCALE', 'default locale for extraction (Default = es)') do |f|
+          @options[:locale] = f || 'es'
         end
 
         opts.on('-nNAMESPACE', '--namespace=NAMESPACE', 'Locale base key to wrap locations in') do |f|
@@ -34,18 +35,13 @@ module ExtractI18n
           @options[:relative] = f
         end
 
-        opts.on('-yYAML', '--yaml=YAML-FILE', 'Write extracted keys to YAML file (default = config/locales/unsorted.LOCALE.yml)') do |f|
-          @options[:write_to] = f || "config/locales/unsorted.#{@options[:locale]}"
-        end
-
         opts.on('-h', '--help', 'Prints this help') do
           puts opts
           exit 1
         end
       end.parse!
 
-      @options[:write_to] ||= "config/locales/unsorted.#{@options[:locale]}.yml"
-      @options[:locale] ||= 'en'
+      @options[:locale] ||= 'es'
       @files = ARGV
     end
 
@@ -67,7 +63,6 @@ module ExtractI18n
       puts "Processing: #{file_path}"
       ExtractI18n::FileProcessor.new(
         file_path: file_path,
-        write_to: @options[:write_to],
         locale: @options[:locale],
         options: @options
       ).run

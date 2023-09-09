@@ -9,6 +9,12 @@ gemspec
 
 gem 'pry'
 gem 'rake'
-gem 'rspec'
-gem 'rubocop'
 gem 'solargraph'
+gem "ruby-openai"
+
+group :test do
+  gem 'webmock'
+  gem 'byebug'
+  gem 'rubocop'
+  gem 'rspec'
+end

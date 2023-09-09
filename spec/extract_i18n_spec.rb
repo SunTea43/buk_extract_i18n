@@ -1,19 +1,19 @@
 RSpec.describe ExtractI18n do
   specify 'File key' do
     expect(
-      ExtractI18n.file_key("app/views/admin/index.html.slim")
-    ).to be == 'admin.index'
-
-    expect(
-      ExtractI18n.file_key("app/views/admin/users/edit.html.slim")
-    ).to be == 'admin.users.edit'
-
-    expect(
       ExtractI18n.file_key("app/models/user.rb")
     ).to be == 'models.user'
+  end
 
+  specify 'File key controller' do
     expect(
-      ExtractI18n.file_key("app/javascript/recruiter/components/EditModal.vue")
-    ).to be == 'recruiter.components.edit_modal'
+      ExtractI18n.file_key("app/controllers/services/command.rb")
+    ).to be == 'controllers.services.command'
+  end
+
+  specify 'File key erb' do
+    expect(
+      ExtractI18n.file_key("app/cells/employee/form/show.erb")
+    ).to be == 'cells.employee.form.show'
   end
 end

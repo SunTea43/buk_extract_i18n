@@ -1,5 +1,8 @@
 require 'extract_i18n'
 require 'pry'
+require 'webmock/rspec'
+
+WebMock.disable_net_connect!(allow_localhost: true)
 
 module AdapterHelpers
   def run(string, file_key: 'models.foo')

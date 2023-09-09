@@ -32,7 +32,7 @@ module ExtractI18n::Adapters
         interpolate_arguments: {},
         source_line: node.to_s,
         remove: node.text,
-        t_template: %{ t('%s') },
+        t_template: %{ I18n.t('%s') },
         interpolation_type: :ruby
       )
       if @on_ask.call(change)

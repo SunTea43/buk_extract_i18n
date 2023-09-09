@@ -5,7 +5,7 @@ RSpec.describe ExtractI18n::Adapters::ErbAdapter do
         <p>\nHello World\n</p>
       DOC
       expect(run(file)).to be == [
-        "<p>\n<%= t('models.foo.hello_world') %>\n</p>\n", { 'models.foo.hello_world' => 'Hello World' }
+        "<p>\n<%= I18n.t('models.foo.hello_world') %>\n</p>\n", { 'models.foo.hello_world' => 'Hello World' }
       ]
     end
 
@@ -21,9 +21,9 @@ RSpec.describe ExtractI18n::Adapters::ErbAdapter do
       expect(run(file)[0]).to be == <<~DOC
         <div>
           <% if a == b %>
-            <%= t('models.foo.some_text') %>
+            <%= I18n.t('models.foo.some_text') %>
           <% end %>
-          <%= t('models.foo.other_text') %>
+          <%= I18n.t('models.foo.other_text') %>
         </div>
       DOC
     end
@@ -35,7 +35,7 @@ RSpec.describe ExtractI18n::Adapters::ErbAdapter do
         <div><input placeholder="Some text"></div>
       DOC
       expect(run(file)[0]).to be == <<~DOC
-        <div><input placeholder="<%= t('models.foo.some_text') %>"></div>
+        <div><input placeholder="<%= I18n.t('models.foo.some_text') %>"></div>
       DOC
     end
 
@@ -44,7 +44,7 @@ RSpec.describe ExtractI18n::Adapters::ErbAdapter do
         <div><span title="Some text"></span></div>
       DOC
       expect(run(file)[0]).to be == <<~DOC
-        <div><span title="<%= t('models.foo.some_text') %>"></span></div>
+        <div><span title="<%= I18n.t('models.foo.some_text') %>"></span></div>
       DOC
     end
   end
@@ -55,7 +55,7 @@ RSpec.describe ExtractI18n::Adapters::ErbAdapter do
         <%= link_to "Hello", some_url, title: \'Some title\' %>
       DOC
       expect(run(file)[0]).to be == <<~DOC
-        <%= link_to t('models.foo.hello'), some_url, title: t('models.foo.some_title') %>
+        <%= link_to I18n.t('models.foo.hello'), some_url, title: I18n.t('models.foo.some_title') %>
       DOC
     end
     specify 'submit' do
@@ -64,8 +64,8 @@ RSpec.describe ExtractI18n::Adapters::ErbAdapter do
         <%= some.label :email, "label text" %>
       DOC
       expect(run(file)[0]).to be == <<~DOC
-        <%= some.submit t('models.foo.submit_text') %>
-        <%= some.label :email, t('models.foo.label_text') %>
+        <%= some.submit I18n.t('models.foo.submit_text') %>
+        <%= some.label :email, I18n.t('models.foo.label_text') %>
       DOC
     end
     specify 'fields' do
@@ -74,8 +74,8 @@ RSpec.describe ExtractI18n::Adapters::ErbAdapter do
         <%= some.email_field :email, placeholder: "email", class: "some" %>
       DOC
       expect(run(file)[0]).to be == <<~DOC
-        <%= some.text_area :text, placeholder: t('models.foo.textarea_label'), class: "some" %>
-        <%= some.email_field :email, placeholder: t('models.foo.email'), class: "some" %>
+        <%= some.text_area :text, placeholder: I18n.t('models.foo.textarea_label'), class: "some" %>
+        <%= some.email_field :email, placeholder: I18n.t('models.foo.email'), class: "some" %>
       DOC
     end
   end

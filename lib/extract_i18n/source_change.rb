@@ -8,7 +8,7 @@ module ExtractI18n
 
     PASTEL = Pastel.new
 
-    attr_reader :key, :i18n_string
+    attr_reader :key, :i18n_string, :source_line
 
     # @param i18n_key [String]
     #   "models.foo.bar.button_text"
@@ -84,13 +84,7 @@ module ExtractI18n
       case @interpolation_type
       when :ruby
         if @interpolate_arguments.keys.length > 0
-          ", " + @interpolate_arguments.map { |k, v| "#{k}: (#{v})" }.join(', ')
-        else
-          ""
-        end
-      when :vue
-        if @interpolate_arguments.keys.length > 0
-          ", { " + @interpolate_arguments.map { |k, v| "#{k}: (#{v.strip})" }.join(', ') + " }"
+          ", " + @interpolate_arguments.map { |k, v| "#{k}: #{v}" }.join(', ')
         else
           ""
         end

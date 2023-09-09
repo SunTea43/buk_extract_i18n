@@ -10,23 +10,28 @@ module ExtractI18n
     PROMPT = TTY::Prompt.new
     PASTEL = Pastel.new
 
-    def initialize(file_path:, write_to:, locale:, options: {})
+    def initialize(file_path:, locale:, options: {})
+      app_dir = ExtractI18n.configuration.app_dir
+      dirname = file_path.split("/")[1..-2]
+      folder_name = File.basename(file_path).split(".").first
+      file_name = "#{locale}.yml"
       @file_path = file_path
       @file_key = ExtractI18n.file_key(@file_path)
-
+      @write_to = File.join(app_dir, dirname, folder_name, file_name)
       @locale = locale
-      @write_to = write_to
       @options = options
       @i18n_changes = {}
     end
 
     def run
       puts " reading #{@file_path}"
-      read_and_transform do |result|
-        puts Diffy::Diff.new(original_content, result, context: 1).to_s(:color)
-        if PROMPT.yes?("Save changes?")
+      if FileManager.registered?(@file_path)
+        puts PASTEL.green("The file has already processed: #{@file_path}")
+      else
+        read_and_transform do |result|
           File.write(@file_path, result)
           update_i18n_yml_file
+          FileManager.register!(@file_path)
           puts PASTEL.green("Saved #{@file_path}")
         end
       end
@@ -57,11 +62,12 @@ module ExtractI18n
     def ask_one_change?(change)
       check_for_unique!(change)
       puts change.format
-      if PROMPT.no?("replace line ?")
-        false
-      else
+      if PROMPT.yes?("Save changes?")
         @i18n_changes[change.key] = change.i18n_string
         true
+      else
+        puts PASTEL.blue("skip #{change.source_line}")
+        false
       end
     end
 
@@ -89,6 +95,8 @@ module ExtractI18n
           end
         end
       end
+
+      FileUtils.mkdir_p(File.dirname(@write_to))
       File.write(@write_to, base.to_yaml)
     end
 
