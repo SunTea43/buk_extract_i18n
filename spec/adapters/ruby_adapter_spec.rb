@@ -134,4 +134,59 @@ RSpec.describe ExtractI18n::Adapters::RubyAdapter do
       file, {}
     ]
   end
+
+  specify 'Ignore empty strings' do
+    file = <<~DOC
+      return render(html: '', layout: false) if sistema_remuneracion.blank?
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore without words' do
+    file = <<~DOC
+      @employee_ids = params[:employee_ids].split(',')
+      mensaje_inicial += step_info[:mensaje_inicial] + ", "
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore logger' do
+    file = <<~DOC
+      Rails.logger.info "Error formato(Procesos): mime:\#{export.mime}, titulo:\#{filename}"
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore slice' do
+    file = <<~DOC
+      filename_hash = filtered_log.slice("filename")
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore get_files_history' do
+    file = <<~DOC
+      @download_history = get_files_history("descarga")
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore strftime' do
+    file = <<~DOC
+      {:date => Time.zone.parse(log["date"]).strftime("%d/%m/%Y-%H:%M")}
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
 end

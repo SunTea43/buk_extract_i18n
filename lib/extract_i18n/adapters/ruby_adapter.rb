@@ -85,6 +85,12 @@ module ExtractI18n::Adapters
       string = node.children.first
       # Ignorar si la cadena contiene solo etiquetas HTML sin contenido
       return if string.match?(/\A\s*<\w+>\s*<\/\w+>\s*\z/)
+      # Ignorar si la cadena contiene un string vacío
+      return if string.empty?
+      # Ignora strings que no contienen caracteres de palabra
+      return unless string =~ /\w/
+      # Ignora strings que no contienen al menos una letra
+      return unless string =~ /[a-zA-Z]/
 
       # Resto de las comprobaciones
       return if ignore?(node) || ignore_parent?(@nesting[-2])
@@ -141,7 +147,8 @@ module ExtractI18n::Adapters
         node.type == :regexp ||
         (node.type == :pair && ExtractI18n.ignore_hash_keys.include?(node.children[0].children[0].to_s)) ||
         (node.type == :send && ExtractI18n.ignore_functions.include?(node.children[1].to_s)) ||
-        node.children[1] == :raise
+        (node.type == :send && node.children[1] == :info && node.children[0].type == :send && node.children[0].children[1] == :logger) ||
+        (node.type == :send && node.children[1] == :info && node.children[0].type == :const && node.children[0].children[1] == :Rails)
     end
   end
 end

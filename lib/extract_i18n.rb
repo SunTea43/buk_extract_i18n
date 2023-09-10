@@ -18,7 +18,7 @@ module ExtractI18n
 
   # ignore for .rb files: ignore those file types
   self.ignore_hash_keys = %w[class_name foreign_key join_table association_foreign_key key anchor]
-  self.ignore_functions = %w[where order group select sql t]
+  self.ignore_functions = %w[where order group select sql t slice get_files_history strftime]
   self.ignorelist = [
     '_',
     '::',
