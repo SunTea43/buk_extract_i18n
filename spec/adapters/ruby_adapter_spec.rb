@@ -117,6 +117,15 @@ RSpec.describe ExtractI18n::Adapters::RubyAdapter do
     ]
   end
 
+  specify 'Ignore complex hash reference' do
+    file = <<~DOC
+      values['c'][0]['p']
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
   specify 'Ignore on interpolation' do
     file = <<~DOC
       form_prefix = "\#{param_key.first}[\#{param_key.last}]"
@@ -184,6 +193,78 @@ RSpec.describe ExtractI18n::Adapters::RubyAdapter do
   specify 'Ignore strftime' do
     file = <<~DOC
       {:date => Time.zone.parse(log["date"]).strftime("%d/%m/%Y-%H:%M")}
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore date format' do
+    file = <<~DOC
+      {format: "%B %Y"}
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore complex format' do
+    file = <<~DOC
+      "\#{name} \#{l(@variable.start_date, format: "%B %Y").capitalize}\#{export.extension}"
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore profile block' do
+    file = <<~DOC
+      @employees = Buk::Profile.block('tabla')
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore address_error_message' do
+    file = <<~DOC
+      error_message = address_error_message error, 'crear'
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore initializer' do
+    file = <<~DOC
+      raise AbstractController::ActionNotFound.new('Not Found') unless General.doble_trabajo
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore extensions' do
+    file = <<~DOC
+      employee_query = { people: Person.where_rut(employee_company_params[:identifier].delete('.pdf'))}
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore dig' do
+    file = <<~DOC
+      value = values.dig('c', 0, 'v', 0)
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore find_by' do
+    file = <<~DOC
+      Model.find_by(section: :employee, name: 'Vigentes', user_id: nil)
     DOC
     expect(run(file)).to be == [
       file, {}

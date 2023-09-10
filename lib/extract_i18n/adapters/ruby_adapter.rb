@@ -28,6 +28,7 @@ module ExtractI18n::Adapters
   class Rewriter < Parser::TreeRewriter
     PROMPT = TTY::Prompt.new
     PASTEL = Pastel.new
+    DATE_FORMAT_REGEX = /%[A-Za-z\s\-:\/]+/
 
     def initialize(file_key:, on_ask:)
       @file_key = file_key
@@ -78,11 +79,8 @@ module ExtractI18n::Adapters
       end
 
       # Ignorar si el nodo es usado como un índice de un hash
-      if parent_node && parent_node.type == :send && parent_node.children[1] == :[] && parent_node.children[2] == node
-        return
-      end
+      return if inside_hash_access?(node)
 
-      string = node.children.first
       # Ignorar si la cadena contiene solo etiquetas HTML sin contenido
       return if string.match?(/\A\s*<\w+>\s*<\/\w+>\s*\z/)
       # Ignorar si la cadena contiene un string vacío
@@ -127,13 +125,25 @@ module ExtractI18n::Adapters
     end
 
     def ignore?(node, parent: nil)
-      unless node.respond_to?(:children)
-        return false
-      end
-      if parent && ignore_parent?(parent)
-        return true
+      return false unless node.respond_to?(:children)
+      return true if parent && ignore_parent?(parent)
+      return true if inside_case_when_statement?(node)
+      if node.type == :send
+        method_name = node.children[1]
+        if [:l, :localize].include?(method_name)
+          format_arg = node.children.last
+          if format_arg && format_arg.type == :hash
+            format_arg.children.each do |pair|
+              if pair.type == :pair && pair.children[0].children.last == :format && DATE_FORMAT_REGEX.match?(pair.children[1].children[0])
+                return true
+              end
+            end
+          end
+        end
       end
       if node.type == :str
+        # ignora formatos, por ejemplo: .pdf
+        return true if node.children[0] =~ /^\.\w+$/
         ExtractI18n.ignorelist.any? { |item| node.children[0][item] }
       else
         node.children.any? { |child|
@@ -143,12 +153,31 @@ module ExtractI18n::Adapters
     end
 
     def ignore_parent?(node)
-      node.children[1] == :require ||
-        node.type == :regexp ||
-        (node.type == :pair && ExtractI18n.ignore_hash_keys.include?(node.children[0].children[0].to_s)) ||
-        (node.type == :send && ExtractI18n.ignore_functions.include?(node.children[1].to_s)) ||
-        (node.type == :send && node.children[1] == :info && node.children[0].type == :send && node.children[0].children[1] == :logger) ||
-        (node.type == :send && node.children[1] == :info && node.children[0].type == :const && node.children[0].children[1] == :Rails)
+      return true if node.children[1] == :require
+      return true if node.type == :regexp
+      return true if node.type == :pair && ExtractI18n.ignore_hash_keys.include?(node.children[0].children[0].to_s)
+      return true if node.type == :send && ExtractI18n.ignore_functions.include?(node.children[1].to_s)
+      return true if node.type == :send && node.children[1] == :info && node.children[0].type == :send && node.children[0].children[1] == :logger
+      return true if node.type == :send && node.children[1] == :info && node.children[0].type == :const && node.children[0].children[1] == :Rails
+
+      # Verificar si el nodo actual está dentro de una llamada a un método que queremos ignorar
+      index = @nesting.index(node)
+      while index && index > 0
+        index -= 1
+        current_node = @nesting[index]
+        return true if current_node.type == :send && ExtractI18n.ignore_functions.include?(current_node.children[1].to_s)
+      end
+
+      false
+    end
+
+    def inside_hash_access?(node)
+      parent_node = @nesting[-2]
+      parent_node && parent_node.type == :send && parent_node.children[1] == :[] && parent_node.children[2] == node
+    end
+
+    def inside_case_when_statement?(node)
+      @nesting.any? { |ancestor_node| ancestor_node.type == :when }
     end
   end
 end

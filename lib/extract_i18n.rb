@@ -17,8 +17,10 @@ module ExtractI18n
   self.strip_path = %r{^app/}
 
   # ignore for .rb files: ignore those file types
-  self.ignore_hash_keys = %w[class_name foreign_key join_table association_foreign_key key anchor]
-  self.ignore_functions = %w[where order group select sql t slice get_files_history strftime]
+  self.ignore_hash_keys = %w[class_name foreign_key join_table association_foreign_key key anchor format]
+  self.ignore_functions = %w[
+    where order group select sql t slice get_files_history strftime block address_error_message new dig find_by
+  ]
   self.ignorelist = [
     '_',
     '::',

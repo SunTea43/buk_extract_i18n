@@ -25,36 +25,37 @@ module ExtractI18n
 
     def run
       puts " reading #{@file_path}"
-      if FileManager.registered?(@file_path)
-        puts PASTEL.green("The file has already processed: #{@file_path}")
-      else
-        read_and_transform do |result|
-          File.write(@file_path, result)
-          update_i18n_yml_file
-          FileManager.register!(@file_path)
-          puts PASTEL.green("Saved #{@file_path}")
-        end
+      read_and_transform do |result|
+        File.write(@file_path, result)
+        update_i18n_yml_file
       end
     end
 
     private
 
     def read_and_transform(&_block)
-      key = if @options[:namespace]
-              "#{@options[:namespace]}.#{@file_key}"
-            else
-              @file_key
-            end
-      adapter_class = ExtractI18n::Adapters::Adapter.for(@file_path)
-      if adapter_class
-        adapter = adapter_class.new(
-          file_key: key,
-          on_ask: ->(change) { ask_one_change?(change) },
-          options: @options,
-        )
-        output = adapter.run(original_content)
-        if output != original_content
-          yield(output)
+      if FileManager.registered?(@file_path)
+        puts PASTEL.green("The file has already processed: #{@file_path}")
+      else
+        key = if @options[:namespace]
+                "#{@options[:namespace]}.#{@file_key}"
+              else
+                @file_key
+              end
+        adapter_class = ExtractI18n::Adapters::Adapter.for(@file_path)
+        if adapter_class
+          adapter = adapter_class.new(
+            file_key: key,
+            on_ask: ->(change) { ask_one_change?(change) },
+            options: @options,
+            )
+          output = adapter.run(original_content)
+          # registramos aún que no genere archivo
+          FileManager.register!(@file_path)
+          puts PASTEL.green("File registered: #{@file_path}")
+          if output != original_content
+            yield(output)
+          end
         end
       end
     end
