@@ -3,5 +3,9 @@
 $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 require 'extract_i18n/cli'
 
+# Cargar el entorno de Rails si está presente
+rails_env_path = File.expand_path('config/environment.rb')
+require_relative rails_env_path if File.exist?(rails_env_path)
+
 result = ExtractI18n::CLI.new.run
 exit(result ? 0 : 1)
