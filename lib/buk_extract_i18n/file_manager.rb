@@ -1,7 +1,7 @@
-module ExtractI18n
+module BukExtractI18n
 
   class FileManager
-    REGISTER_FILE_PATH = ExtractI18n.configuration.processed_files_path
+    REGISTER_FILE_PATH = BukExtractI18n.configuration.processed_files_path
     def self.register!(file_path)
       existing_paths = []
 

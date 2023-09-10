@@ -1,13 +1,13 @@
 require 'json'
 require 'openai'
 
-module ExtractI18n::Openai
+module BukExtractI18n::Openai
   class Connector
     def request(prompt)
-      client = OpenAI::Client.new(access_token: ExtractI18n.configuration.openai_api_key)
+      client = OpenAI::Client.new(access_token: BukExtractI18n.configuration.openai_api_key)
       response = client.chat(
         parameters: {
-          model: ExtractI18n.configuration.openai_model,
+          model: BukExtractI18n.configuration.openai_model,
           messages: [{ role: "user", content: prompt}],
           temperature: 0.7,
         })

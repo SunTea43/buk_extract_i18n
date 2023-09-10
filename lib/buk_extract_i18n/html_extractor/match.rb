@@ -1,4 +1,4 @@
-module ExtractI18n
+module BukExtractI18n
   module HTMLExtractor
     module Match
       class Finder
@@ -25,7 +25,7 @@ module ExtractI18n
         end
 
         def form_fields(document)
-          ExtractI18n.html_fields_with_plaintext.flat_map do |field|
+          BukExtractI18n.html_fields_with_plaintext.flat_map do |field|
             document.
               css("[#{field}]").
               select { |input| input[field] && !input[field].empty? }.

@@ -1,6 +1,6 @@
 require 'nokogiri'
 
-module ExtractI18n
+module BukExtractI18n
   module HTMLExtractor
     class ErbDocument
       ERB_REGEXPS = [

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "extract_i18n/version"
+require "buk_extract_i18n/version"
 
 require "zeitwerk"
 loader = Zeitwerk::Loader.for_gem
@@ -9,7 +9,7 @@ loader.inflector.inflect(
 )
 loader.setup # ready!
 
-module ExtractI18n
+module BukExtractI18n
   class << self
     attr_accessor :strip_path, :ignore_hash_keys, :ignore_functions, :ignorelist, :html_fields_with_plaintext
   end
@@ -39,8 +39,8 @@ module ExtractI18n
   end
 
   def self.key(string, length: 25)
-    if ExtractI18n.configuration.use_open_ai
-      text_processor = ExtractI18n::Openai::TextProcessor.new
+    if BukExtractI18n.configuration.use_open_ai
+      text_processor = BukExtractI18n::Openai::TextProcessor.new
       text_processor.key_summary(string)
     else
       string.strip.
@@ -61,4 +61,4 @@ module ExtractI18n
   end
 end
 
-require 'extract_i18n/file_processor'
+require 'buk_extract_i18n/file_processor'

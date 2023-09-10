@@ -1,4 +1,4 @@
-RSpec.describe ExtractI18n::Adapters::ErbAdapter do
+RSpec.describe BukExtractI18n::Adapters::ErbAdapter do
   describe 'plaintext' do
     specify 'normal string' do
       file = <<~DOC

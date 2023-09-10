@@ -1,4 +1,4 @@
-module ExtractI18n
+module BukExtractI18n
   module HTMLExtractor
     module Match
       class ErbDirectiveMatch < NodeMatch

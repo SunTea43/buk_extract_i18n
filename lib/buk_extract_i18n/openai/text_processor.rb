@@ -1,4 +1,4 @@
-module ExtractI18n::Openai
+module BukExtractI18n::Openai
   class TextProcessor
     def initialize
       @connector = Connector.new

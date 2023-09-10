@@ -1,6 +1,3 @@
-require 'dotenv'
-Dotenv.load
-
 describe TextProcessor do
   let(:processor) { TextProcessor.new }
 

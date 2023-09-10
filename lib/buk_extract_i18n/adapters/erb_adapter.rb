@@ -1,12 +1,12 @@
-module ExtractI18n::Adapters
+module BukExtractI18n::Adapters
   class ErbAdapter < Adapter
     def run(original_content)
       unless valid_erb?(original_content)
         puts "ERB invalid!"
         return original_content
       end
-      document = ExtractI18n::HTMLExtractor::ErbDocument.parse_string(original_content)
-      nodes_to_translate = ExtractI18n::HTMLExtractor::Match::Finder.new(document).matches
+      document = BukExtractI18n::HTMLExtractor::ErbDocument.parse_string(original_content)
+      nodes_to_translate = BukExtractI18n::HTMLExtractor::Match::Finder.new(document).matches
       nodes_to_translate.each { |node|
         next if node.text == ""
 
@@ -26,8 +26,8 @@ module ExtractI18n::Adapters
     end
 
     def process_change(node)
-      change = ExtractI18n::SourceChange.new(
-        i18n_key: "#{@file_key}.#{ExtractI18n.key(node.text.strip)}",
+      change = BukExtractI18n::SourceChange.new(
+        i18n_key: "#{@file_key}.#{BukExtractI18n.key(node.text.strip)}",
         i18n_string: node.text,
         interpolate_arguments: {},
         source_line: node.to_s,

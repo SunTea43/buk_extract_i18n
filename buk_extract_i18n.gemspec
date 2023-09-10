@@ -1,16 +1,16 @@
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "extract_i18n/version"
+require "buk_extract_i18n/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "extract_i18n"
-  spec.version       = ExtractI18n::VERSION
+  spec.name          = "buk_extract_i18n"
+  spec.version       = BukExtractI18n::VERSION
   spec.authors       = ["Stefan Wienert"]
   spec.email         = ["info@stefanwienert.de"]
 
   spec.summary       = %q{Extract i18n from Ruby files using Ruby parser using regex}
   spec.description   = %q{Extract i18n from Ruby files using Ruby parser using regex interactively}
-  spec.homepage      = "https://github.com/pludoni/extract_i18n"
+  spec.homepage      = "https://github.com/kb714/extract_i18n"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   end
   spec.bindir        = "exe"
-  spec.executables   << "extract-i18n"
+  spec.executables   << "buk-buk-extract-i18n"
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency 'nokogiri'

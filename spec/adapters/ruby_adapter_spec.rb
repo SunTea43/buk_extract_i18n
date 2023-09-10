@@ -1,4 +1,4 @@
-RSpec.describe ExtractI18n::Adapters::RubyAdapter do
+RSpec.describe BukExtractI18n::Adapters::RubyAdapter do
   def stub_openai_response(*responses)
     stub_request(:post, "https://api.openai.com/v1/chat/completions")
       .to_return(*responses.map do |response|

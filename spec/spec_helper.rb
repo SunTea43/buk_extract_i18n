@@ -1,4 +1,4 @@
-require 'extract_i18n'
+require 'buk_extract_i18n'
 require 'pry'
 require 'webmock/rspec'
 

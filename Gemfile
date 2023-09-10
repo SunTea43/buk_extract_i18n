@@ -4,15 +4,15 @@ source "https://rubygems.org"
 
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
-# Specify your gem's dependencies in extract_i18n.gemspec
+# Specify your gem's dependencies in buk_extract_i18n.gemspec
 gemspec
 
-gem 'pry'
 gem 'rake'
 gem 'solargraph'
 gem "ruby-openai"
 
 group :test do
+  gem 'pry'
   gem 'webmock'
   gem 'byebug'
   gem 'rubocop'

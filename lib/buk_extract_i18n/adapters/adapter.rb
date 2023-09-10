@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ExtractI18n::Adapters
+module BukExtractI18n::Adapters
   class Adapter
     def self.for(file_path)
       case file_path

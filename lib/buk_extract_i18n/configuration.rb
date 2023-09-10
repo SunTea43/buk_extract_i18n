@@ -1,4 +1,4 @@
-module ExtractI18n
+module BukExtractI18n
   class Configuration
 
     attr_accessor :use_open_ai, :app_dir, :openai_api_key, :openai_model, :processed_files_path

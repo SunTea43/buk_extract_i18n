@@ -5,18 +5,18 @@ require 'tty/prompt'
 require 'diffy'
 require 'yaml'
 
-module ExtractI18n
+module BukExtractI18n
   class FileProcessor
     PROMPT = TTY::Prompt.new
     PASTEL = Pastel.new
 
     def initialize(file_path:, locale:, options: {})
-      app_dir = ExtractI18n.configuration.app_dir
+      app_dir = BukExtractI18n.configuration.app_dir
       dirname = file_path.split("/")[1..-2]
       folder_name = File.basename(file_path).split(".").first
       file_name = "#{locale}.yml"
       @file_path = file_path
-      @file_key = ExtractI18n.file_key(@file_path)
+      @file_key = BukExtractI18n.file_key(@file_path)
       @write_to = File.join(app_dir, dirname, folder_name, file_name)
       @locale = locale
       @options = options
@@ -42,7 +42,7 @@ module ExtractI18n
               else
                 @file_key
               end
-        adapter_class = ExtractI18n::Adapters::Adapter.for(@file_path)
+        adapter_class = BukExtractI18n::Adapters::Adapter.for(@file_path)
         if adapter_class
           adapter = adapter_class.new(
             file_key: key,

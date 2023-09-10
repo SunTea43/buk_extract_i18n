@@ -1,4 +1,4 @@
-module ExtractI18n
+module BukExtractI18n
   module HTMLExtractor
     class TwoWayRegexp
       attr_reader :from, :to

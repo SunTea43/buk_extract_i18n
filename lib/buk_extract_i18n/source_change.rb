@@ -2,7 +2,7 @@
 
 require 'pastel'
 
-module ExtractI18n
+module BukExtractI18n
   class SourceChange
     # Data class for a proposed source change
 

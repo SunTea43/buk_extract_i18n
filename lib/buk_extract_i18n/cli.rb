@@ -3,23 +3,22 @@
 # rubocop:disable Layout/LineLength
 
 require 'optparse'
-require 'extract_i18n'
-require 'extract_i18n/file_processor'
-require 'extract_i18n/version'
+require 'buk_extract_i18n'
+require 'buk_extract_i18n/file_processor'
+require 'buk_extract_i18n/version'
 require 'open-uri'
-require 'byebug'
 
-module ExtractI18n
+module BukExtractI18n
   # Cli Class
   class CLI
     def initialize
       @options = {}
       ARGV << '-h' if ARGV.empty?
       OptionParser.new do |opts|
-        opts.banner = "Usage: extract-i18n -l <locale> -w <target-yml> [path*]"
+        opts.banner = "Usage: buk-extract-i18n -l <locale> -w <target-yml> [path*]"
 
         opts.on('--version', 'Print version number') do
-          puts ExtractI18n::VERSION
+          puts BukExtractI18n::VERSION
           exit 1
         end
 
@@ -61,7 +60,7 @@ module ExtractI18n
 
     def process_file(file_path)
       puts "Processing: #{file_path}"
-      ExtractI18n::FileProcessor.new(
+      BukExtractI18n::FileProcessor.new(
         file_path: file_path,
         locale: @options[:locale],
         options: @options
