@@ -270,4 +270,49 @@ RSpec.describe ExtractI18n::Adapters::RubyAdapter do
       file, {}
     ]
   end
+
+  specify 'Ignore cancancan load' do
+    file = <<~DOC
+      load_and_authorize_resource class: 'ParameterTable'
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore .not' do
+    file = <<~DOC
+      Model.order(:nombre).where.not("nombre = ? AND tipo = ?", NON_USABLE_ACCOUNTS[0], CuentaContable.tipos[:general])
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore .starts_with?' do
+    file = <<~DOC
+      query.starts_with?('en:') && query.split(' ')
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore .include?' do
+    file = <<~DOC
+      query.select{ |q| q.include?("en:\#{group}") }.any?
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore .eql?' do
+    file = <<~DOC
+      action_name.eql? 'update'
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
 end
