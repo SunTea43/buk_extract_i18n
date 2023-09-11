@@ -17,10 +17,12 @@ module BukExtractI18n
   self.strip_path = %r{^app/}
 
   # ignore for .rb files: ignore those file types
-  self.ignore_hash_keys = %w[class_name foreign_key join_table association_foreign_key key anchor format class]
+  self.ignore_hash_keys = %w[
+    class_name foreign_key join_table association_foreign_key key anchor format class type country_namespace table_id
+  ]
   self.ignore_functions = %w[
     where order group select sql t slice get_files_history strftime block address_error_message new dig find_by not
-    starts_with? include? eql?
+    starts_with? include? eql? load_and_authorize_resource concat casecmp include? error
   ]
   self.ignorelist = [
     '_',
@@ -28,7 +30,7 @@ module BukExtractI18n
     %r{^/},
     %r{==\s*['"].+['"]}
   ]
-  self.html_fields_with_plaintext = %w[title placeholder alt label aria-label modal-title anchor]
+  self.html_fields_with_plaintext = %w[title placeholder alt aria-label modal-title anchor]
 
   def self.configuration
     @configuration ||= Configuration.new

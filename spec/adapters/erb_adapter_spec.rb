@@ -68,6 +68,7 @@ RSpec.describe BukExtractI18n::Adapters::ErbAdapter do
         <%= some.label :email, I18n.t('models.foo.label_text') %>
       DOC
     end
+
     specify 'fields' do
       file = <<~DOC
         <%= some.text_area :text, placeholder: "textarea label", class: "some" %>
@@ -76,6 +77,39 @@ RSpec.describe BukExtractI18n::Adapters::ErbAdapter do
       expect(run(file)[0]).to be == <<~DOC
         <%= some.text_area :text, placeholder: I18n.t('models.foo.textarea_label'), class: "some" %>
         <%= some.email_field :email, placeholder: I18n.t('models.foo.email'), class: "some" %>
+      DOC
+    end
+
+    specify 'complex erb' do
+      file = <<~DOC
+        <%= simple_form_for :bono, method: :post, url: create_defaults_public_sector_items_active_admin_bonos_path, html: {class: 'bg-white'} do |f| %>
+          <fieldset class='inputs'>
+            <%= f.input :remuneration_system, label: 'Sistema Remuneración', as: :select, collection: remuneration_systems, wrapper_html: {class: 'select input required'} %>
+            <div class = 'form-group select input'>
+              <%= f.label 'Asignar items', class: 'control-label select required' %>
+              <%= f.input :assign_assignable_always, label: false, as: :boolean %>
+            </div>
+            <fieldset class='actions'>
+              <%= f.submit I18n.t('cells.admin.bono_admin.public_sector_defaults.show.crear_items') %>
+              <%= link_to I18n.t('cells.admin.bono_admin.public_sector_defaults.show.volver'), active_admin_bonos_path %>
+            </fieldset>
+          </fieldset>
+        <% end %>
+      DOC
+      expect(run(file)[0]).to be == <<~DOC
+        <%= simple_form_for :bono, method: :post, url: create_defaults_public_sector_items_active_admin_bonos_path, html: {class: 'bg-white'} do |f| %>
+          <fieldset class='inputs'>
+            <%= f.input :remuneration_system, label: 'Sistema Remuneración', as: :select, collection: remuneration_systems, wrapper_html: {class: 'select input required'} %>
+            <div class = 'form-group select input'>
+              <%= f.label 'Asignar items', class: 'control-label select required' %>
+              <%= f.input :assign_assignable_always, label: false, as: :boolean %>
+            </div>
+            <fieldset class='actions'>
+              <%= f.submit I18n.t('cells.admin.bono_admin.public_sector_defaults.show.crear_items') %>
+              <%= link_to I18n.t('cells.admin.bono_admin.public_sector_defaults.show.volver'), active_admin_bonos_path %>
+            </fieldset>
+          </fieldset>
+        <% end %>
       DOC
     end
   end

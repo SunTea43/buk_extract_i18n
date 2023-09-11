@@ -29,6 +29,8 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'parser', '>= 2.6'
   spec.add_runtime_dependency 'tty-prompt'
   spec.add_runtime_dependency 'zeitwerk'
+  spec.add_dependency "better_html"
+  spec.add_dependency "ruby-openai"
   spec.add_dependency "diff-lcs"
   spec.add_dependency "diffy"
 end

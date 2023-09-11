@@ -315,4 +315,58 @@ RSpec.describe BukExtractI18n::Adapters::RubyAdapter do
       file, {}
     ]
   end
+
+  specify 'Ignore load_and_authorize_resource?' do
+    file = <<~DOC
+      load_and_authorize_resource instance_name: 'sobretiempo', class: 'Sobretiempo', only: [:approve, :reject]
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore load_and_authorize_resource?' do
+    file = <<~DOC
+      send_data file.contenido, filename: file_name + ".xls", type: "application/vnd.ms-excel"
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore country_namespace' do
+    file = <<~DOC
+      {country_namespace: "colombia"}
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore table_id' do
+    file = <<~DOC
+      {table_id: "multi-select-employee"}
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore include?' do
+    file = <<~DOC
+      Object.include?("employees")
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
+  specify 'Ignore error logger' do
+    file = <<~DOC
+      Rails.logger.error "Document Signature request failed"
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
 end
