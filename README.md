@@ -21,9 +21,6 @@ install Gemfile:
 
 ## Usage
 
-DO USE A SOURCE-CODE-MANAGEMENT-SYSTEM (Git). There is no guarantee that programm will not destroy your workspace :)
-
-
 ```
 buk-extract-i18n --help
 
@@ -31,12 +28,20 @@ buk-extract-i18n app/controllers/admin
 ```
 
 If you prefer relative keys in slim views use ``--slim-relative``, e.g. ``t('.title')`` instead of ``t('users.index.title')``.
-I prefer absolute keys, as it makes copy pasting/ moving files much safer.
+I prefer absolute keys, as it makes copy pasting/moving files much safer.
 
+By default, the path of the generated YMLs share the same path as the file from which they are extracted, the name is given by the language you are working with.
 
-## Contributing
+For example:
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/kb714/buk_extract_i18n.
+If you extract the text from
+```
+app/cells/employee/form/show.erb
+```
+The YML it generates will be in
+```
+config/locales/cells/employee/form/show/es.yml
+```
 
 ## License
 
